@@ -5,16 +5,25 @@ from sympy import randprime
 from math import gcd
 
 #The following two functions will return a value of d when you pass it the parameters public-key exponent and totient.
+
+#implementation of the extended Euclidean algorithm to find the GCD
+#The function takes in two arguments, aa and bb, which are the two numbers for which we want to find the GCD
 def extended_gcd(aa, bb):
+    # The function first assigns the absolute values of aa and bb to lastremainder and remainder
     lastremainder, remainder = abs(aa), abs(bb)
     x, lastx, y, lasty = 0, 1, 1, 0
+    # a while loop, where it continuously updates the values of lastremainder, remainder, x, lastx, y, and lasty until remainder is 0.
     while remainder:
         lastremainder, (quotient, remainder) = remainder, divmod(lastremainder, remainder)
         x, lastx = lastx - quotient*x, x
         y, lasty = lasty - quotient*y, y
+    #returns the GCD , 
     return lastremainder, lastx * (-1 if aa < 0 else 1), lasty * (-1 if bb < 0 else 1)
 
 #We produce the private-key exponent by finding the modular inverse of the public-key exponent, using the totient as the modulus.
+#This function is used to find the modular inverse of a number
+# a and m, which represent the number and the modulus
+#If the GCD is equal to 1, the function returns x mod m.
 def modinv(a, m):
 	g, x, y = extended_gcd(a, m)
 	if g != 1:
